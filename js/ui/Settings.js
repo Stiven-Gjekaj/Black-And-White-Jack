@@ -36,6 +36,30 @@ export default class SettingsUI{
     btn.style.borderRadius='8px';
     btn.addEventListener('click',()=>this.togglePanel());
     wrap.appendChild(btn);
+
+    // add funds button
+    const addBtn=document.createElement('button');
+    addBtn.title='Add funds to bankroll';
+    addBtn.textContent='Add Funds';
+    addBtn.style.padding='6px 10px';
+    addBtn.style.marginLeft='6px';
+    addBtn.style.borderRadius='8px';
+    addBtn.addEventListener('click',()=>{
+      const input = prompt('Add funds (in dollars):', '100');
+      if(input===null) return; // cancelled
+      const amount = parseFloat(String(input).trim());
+      if(!isFinite(amount) || amount<=0){
+        this.renderer.showToast('Enter a valid amount');
+        return;
+      }
+      if(this.engine.chips.addFunds(amount)){
+        this.renderer.updateHUD();
+        this.renderer.showToast(`Added $${amount.toFixed(2)}`);
+      } else {
+        this.renderer.showToast('Unable to add funds');
+      }
+    });
+    wrap.appendChild(addBtn);
     hud.appendChild(wrap);
 
     // panel
@@ -121,4 +145,3 @@ export default class SettingsUI{
     this.togglePanel();
   }
 }
-

@@ -74,6 +74,15 @@ export default class Chips {
     saveToStorage('bankroll', this.bankrollCents);
   }
 
+  /** Add funds to bankroll without affecting current bet. amountDollars may be fractional. */
+  addFunds(amountDollars){
+    const cents = Math.round((Number(amountDollars)||0) * 100);
+    if(cents <= 0) return false;
+    this.bankrollCents += cents;
+    saveToStorage('bankroll', this.bankrollCents);
+    return true;
+  }
+
   get bankroll(){
     return this.bankrollCents;
   }
