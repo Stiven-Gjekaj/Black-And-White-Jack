@@ -3,12 +3,14 @@ import AudioManager from './game/AudioManager.js';
 import Animations from './ui/Animations.js';
 import Renderer from './ui/Renderer.js';
 import Controls from './ui/Controls.js';
+import SettingsUI from './ui/Settings.js';
 
 const engine=new BlackjackEngine();
 const audio=new AudioManager();
 const animations=new Animations();
 const renderer=new Renderer(engine, animations, audio);
 new Controls(engine, renderer, audio);
+new SettingsUI(engine, renderer, animations, audio);
 renderer.render();
 
 // simple mobile detection for layout adjustments

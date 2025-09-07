@@ -25,11 +25,14 @@ export default class BlackjackEngine{
     this.state=States.BETTING;
     this.hands=[]; // player hands
     this.dealer=[];
+    this.lastResults=null;
   }
 
   /** Start a round once bet is placed */
   startRound(){
     if(this.chips.bet<=0) return false;
+    // record current bet for quick re-bet next hand
+    this.chips.recordLastBet();
     this.state=States.DEALING;
     this.hands=[{cards:[this.deck.draw(), this.deck.draw()], bet:this.chips.bet, doubled:false, surrendered:false}];
     this.dealer=[this.deck.draw(), this.deck.draw()];
@@ -122,33 +125,47 @@ export default class BlackjackEngine{
     const results=[];
     for(const hand of this.hands){
       const playerVal=this.handValue(hand.cards);
-      let outcome=0; // -1 lose, 0 push, 1 win
+      let outcome=0; // -1 lose, 0 push, 1 win, -0.5 surrender
       if(hand.surrendered){
         outcome=-0.5;
+        // half returned already in surrender(); lose the remaining half (bankroll unchanged)
+        this.chips.lose(hand.bet);
       } else if(hand.bust){
         outcome=-1;
+        this.chips.lose(hand.bet);
       } else if(dealerVal.total>21 || playerVal.total>dealerVal.total){
         outcome=1;
+        const mult = this.isBlackjack(hand.cards) ? (this.settings.blackjackPays==='3:2'?1.5:1.2) : 1;
+        this.chips.win(hand.bet, mult);
       } else if(playerVal.total<dealerVal.total){
         outcome=-1;
+        this.chips.lose(hand.bet);
       } else {
         outcome=0;
+        this.chips.push(hand.bet);
       }
       results.push(outcome);
-      if(outcome>0){
-        const mult = this.isBlackjack(hand.cards) ? (this.settings.blackjackPays==='3:2'?1.5:1.2) : 1;
-        this.chips.payout(mult);
-      } else if(outcome===0){
-        this.chips.bankrollCents += hand.bet; // return bet
-        this.chips.betCents = 0;
-      } else if(outcome<0){
-        this.chips.lose();
-      }
     }
+    // build a summary before clearing state for UI to consume
+    this.lastResults={
+      outcomes: results.slice(),
+      dealer: {cards: this.dealer.slice(), value: dealerVal.total, bust: dealerVal.total>21},
+      hands: this.hands.map(h=>({
+        cards: h.cards.slice(),
+        bet: h.bet,
+        value: this.handValue(h.cards).total,
+        blackjack: this.isBlackjack(h.cards),
+        bust: !!h.bust,
+        surrendered: !!h.surrendered
+      }))
+    };
+    // round over
     this.state=States.BETTING;
     this.hands=[];
     this.dealer=[];
-    return results;
+    // all bets settled
+    this.chips.betCents = 0;
+    return this.lastResults;
   }
 
   handValue(cards){

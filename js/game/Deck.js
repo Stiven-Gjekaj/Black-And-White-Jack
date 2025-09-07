@@ -11,6 +11,8 @@ export default class Deck {
     this.settings = {...DEFAULT_SETTINGS, ...loadFromStorage('tableSettings',{}), ...settings};
     this.shoe = [];
     this.discards = [];
+    this.totalCards = 0;
+    this.reshuffleAt = 0; // reshuffle when remaining <= this value
     this.reset();
   }
 
@@ -27,12 +29,16 @@ export default class Deck {
       }
     }
     RNG.shuffle(this.shoe);
-    this.cutIndex = Math.floor(this.shoe.length * this.settings.penetration);
+    this.totalCards = this.shoe.length;
+    // compute remaining threshold at which to reshuffle
+    const penetration = this.settings.penetration;
+    const remainingThreshold = Math.ceil(this.totalCards * (1 - penetration));
+    this.reshuffleAt = Math.max(0, remainingThreshold);
   }
 
-  /** Draw next card, reshuffling if cut card reached */
+  /** Draw next card, reshuffling when remaining at/below threshold */
   draw(){
-    if(this.shoe.length===0 || this.shoe.length<=this.shoe.length - this.cutIndex){
+    if(this.shoe.length===0 || this.shoe.length<=this.reshuffleAt){
       this.reset();
     }
     return this.shoe.pop();

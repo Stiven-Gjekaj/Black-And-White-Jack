@@ -3,14 +3,13 @@
 A lightweight Blackjack game built with vanilla HTML, CSS and JavaScript. No frameworks or bundlers. Designed to run entirely from a static folder or GitHub Pages and playable offline thanks to a service worker.
 
 ## Features
-- 6-deck shoe with automatic reshuffle (cut-card reshuffle logic fixed)
-- Actions: hit, stand, double, split, surrender
+- 6-deck shoe with automatic reshuffle
+- Actions: hit, stand, double, split, surrender, insurance (basic UI)
 - Keyboard shortcuts (H hit, S stand, D deal, B double, X split, U surrender, M mute)
-- Chip rack with denominations 1-500, plus Clear Bet and Rebet
-- Bankroll, last bet, and settings persist via localStorage
+- Chip rack with denominations 1-500
+- Bankroll and settings persist via localStorage
 - Responsive layout for desktop and mobile with automatic touch-friendly control sizing
 - Sounds and animations with reduced motion support
-- Settings panel (gear icon): decks, dealer hits S17, blackjack payout, animation speed, reset bankroll
 
 ## Run locally
 Open `index.html` in a modern browser. No build step is required. To deploy on GitHub Pages, push the repository and enable Pages pointing to the root.
@@ -31,4 +30,5 @@ ARIA labels and keyboard shortcuts are provided. SVG assets ensure crisp renderi
 
 ## Known limitations
 - Only single player vs dealer (no side bets or multiplayer)
-- Basic animations and graphics — feel free to enhance
+- Basic animations and graphics – feel free to enhance
+
