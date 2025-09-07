@@ -31,6 +31,3 @@ ARIA labels and keyboard shortcuts are provided. SVG assets ensure crisp renderi
 ## Known limitations
 - Only single player vs dealer (no side bets or multiplayer)
 - Basic animations and graphics – feel free to enhance
-
-## License
-MIT
