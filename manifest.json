@@ -1,0 +1,11 @@
+{
+  "name": "Black-WhiteJack",
+  "short_name": "BlackJack",
+  "display": "standalone",
+  "start_url": "index.html",
+  "background_color": "#063",
+  "theme_color": "#063",
+  "icons": [
+    {"src":"assets/icons/chip.svg","sizes":"100x100","type":"image/svg+xml"}
+  ]
+}

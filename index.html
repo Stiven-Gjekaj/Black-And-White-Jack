@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black-WhiteJack</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<main id="game">
+  <canvas id="table" aria-hidden="true"></canvas>
+  <div id="dealer-area"></div>
+  <div id="player-area"></div>
+  <div id="hud"><span id="bankroll"></span> | <span id="bet"></span></div>
+  <div id="chip-rack" aria-label="Chip rack"></div>
+  <div id="controls" aria-label="Controls"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
